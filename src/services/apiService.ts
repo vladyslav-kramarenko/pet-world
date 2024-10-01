@@ -30,6 +30,8 @@ export const fetchPetsWithFilters = async (filters: {
     country?: string;
     province?: string;
     town?: string;
+    price?: number;
+    gender?: string;
 }): Promise<Pet[]> => {
     try {
         const response = await axios.get(API_URL, { params: filters });
@@ -58,7 +60,12 @@ export const fetchPetById = async (petId: string): Promise<Pet> => {
  */
 export const createPet = async (petData: Pet): Promise<void> => {
     try {
-        await axios.post(API_URL, petData);
+        // Convert fields like `price` to their correct types before sending
+        const formattedPetData = {
+            ...petData,
+            price: Number(petData.price), // Ensure price is a number
+        };
+        await axios.post(API_URL, formattedPetData);
     } catch (error) {
         console.error('Error creating pet:', error);
         throw error;
@@ -70,7 +77,11 @@ export const createPet = async (petData: Pet): Promise<void> => {
  */
 export const updatePet = async (petId: string, petData: Pet): Promise<void> => {
     try {
-        await axios.put(`${API_URL}/${petId}`, petData);
+        const formattedPetData = {
+            ...petData,
+            price: Number(petData.price), // Ensure price is a number
+        };
+        await axios.put(`${API_URL}/${petId}`, formattedPetData);
     } catch (error) {
         console.error('Error updating pet:', error);
         throw error;
