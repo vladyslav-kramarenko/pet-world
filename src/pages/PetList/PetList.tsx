@@ -1,8 +1,8 @@
 // src/pages/PetList.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchPetsWithFilters } from '../services/apiService'; // Import the service function
-import { Pet } from '../types/Pet';
+import { fetchPetsWithFilters } from '../../services/apiService'; // Import the service function
+import { Pet } from '../../types/Pet';
 
 const PetList: React.FC = () => {
     const [pets, setPets] = useState<Pet[]>([]);
