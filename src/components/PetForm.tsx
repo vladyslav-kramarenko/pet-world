@@ -2,51 +2,49 @@
 
 import React, { useState } from 'react';
 import { Pet } from '../types/Pet';
+import './PetForm.css';
 
 type PetFormProps = {
-    initialPet?: Pet;  // Initial values for the pet form (optional)
+    initialPet?: Pet;  // Initial pet data, optional for new pets
     onSubmit: (petData: Pet) => void;
 };
 
 const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit }) => {
-    // Set up form state with initial values or defaults
     const [petData, setPetData] = useState<Pet>({
         pet_id: initialPet?.pet_id || '',
         pet_name: initialPet?.pet_name || '',
         pet_type: initialPet?.pet_type || '',
-        age: initialPet?.age || 'Unknown',
+        age: initialPet?.age || 'Baby',
         country: initialPet?.country || '',
         province: initialPet?.province || '',
         town: initialPet?.town || '',
         description: initialPet?.description || '',
         price: initialPet?.price || 0,
-        gender: initialPet?.gender || 'Unknown',
-        health_status: initialPet?.health_status || [],  // Default to empty array
-        documents: initialPet?.documents || [],          // Default to empty array
-        image_url: initialPet?.image_url || '',
+        health_status: initialPet?.health_status || ['Not specified'],
+        documents: initialPet?.documents || ['No documents'],
+        main_image_url: initialPet?.main_image_url || '',
     });
 
-    // Handle changes to form inputs
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setPetData((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Handle changes to array inputs like health_status and documents
-    const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: keyof Pet) => {
+    const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Pet) => {
         const { value } = e.target;
-        const arrayValues = value.split(',').map((item) => item.trim());  // Split by comma and trim whitespace
-        setPetData((prev) => ({ ...prev, [fieldName]: arrayValues }));
+        setPetData((prev) => ({
+            ...prev,
+            [field]: value.split(',').map((item) => item.trim()),
+        }));
     };
 
-    // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(petData);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="pet-form">
             <label>Pet Name:</label>
             <input type="text" name="pet_name" value={petData.pet_name} onChange={handleChange} required />
 
@@ -68,30 +66,29 @@ const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit }) => {
             <label>Price:</label>
             <input type="number" name="price" value={petData.price} onChange={handleChange} required />
 
-            <label>Gender:</label>
-            <input type="text" name="gender" value={petData.gender} onChange={handleChange} />
-
-            <label>Health Status:</label>
+            <label>Health Status (comma separated):</label>
             <input
                 type="text"
                 name="health_status"
-                value={petData.health_status.join(', ')} // Join array into string for display
-                onChange={(e) => handleArrayChange(e, 'health_status')} // Update array field
+                value={petData.health_status.join(', ')}
+                onChange={(e) => handleArrayChange(e, 'health_status')}
+                required
             />
 
-            <label>Documents:</label>
+            <label>Documents (comma separated):</label>
             <input
                 type="text"
                 name="documents"
-                value={petData.documents.join(', ')} // Join array into string for display
-                onChange={(e) => handleArrayChange(e, 'documents')} // Update array field
+                value={petData.documents.join(', ')}
+                onChange={(e) => handleArrayChange(e, 'documents')}
+                required
             />
 
-            <label>Image URL:</label>
-            <input type="text" name="image_url" value={petData.image_url} onChange={handleChange} />
-
             <label>Description:</label>
-            <textarea name="description" value={petData.description} onChange={handleChange}></textarea>
+            <textarea name="description" value={petData.description} onChange={handleChange} required></textarea>
+
+            <label>Image URL:</label>
+            <input type="text" name="image_url" value={petData.main_image_url} onChange={handleChange} />
 
             <button type="submit">Submit</button>
         </form>
