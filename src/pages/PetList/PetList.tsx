@@ -1,8 +1,11 @@
-// src/pages/PetList.tsx
+// src/components/PetList.tsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchPetsWithFilters } from '../../services/apiService'; // Import the service function
-import { Pet } from '../../types/Pet';
+
+import './PetList.css';
+import {fetchPetsWithFilters} from "../../services/apiService";
+import {Pet} from "../../types/Pet";
+import PetCard from "../../components/PetCard/PetCard"; // Import the CSS file
 
 const PetList: React.FC = () => {
     const [pets, setPets] = useState<Pet[]>([]);
@@ -15,11 +18,6 @@ const PetList: React.FC = () => {
         town: '',
     });
 
-    // Fetch pets whenever the filters change
-    useEffect(() => {
-        fetchPets();
-    }, [filters]);
-
     // Fetch pets based on filters
     const fetchPets = async () => {
         try {
@@ -30,6 +28,11 @@ const PetList: React.FC = () => {
         }
     };
 
+    // Fetch pets whenever the filters change
+    useEffect(() => {
+        fetchPets();
+    }, [filters]);
+
     // Handle input changes for each filter field
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -37,11 +40,8 @@ const PetList: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Available Pets</h1>
-            <Link to="/create">Add New Pet</Link>
-            {/* Filter Section */}
-            <div style={{ marginBottom: '20px' }}>
+        <div className="pet-list-container">
+            <div className="filters">
                 <h3>Filters:</h3>
                 <label>
                     Type:
@@ -99,17 +99,11 @@ const PetList: React.FC = () => {
             </div>
 
             {/* List of Pets */}
-            <ul>
+            <div className="pet-list">
                 {pets.map((pet) => (
-                    <li key={pet.pet_id}>
-                        <h2>{pet.pet_name}</h2>
-                        <p>Type: {pet.pet_type}</p>
-                        <p>Age: {pet.age}</p>
-                        <p>Location: {pet.town}, {pet.province}, {pet.country}</p> {/* Updated to show location */}
-                        <Link to={`/pet/${pet.pet_id}`}>View Profile</Link> | <Link to={`/edit/${pet.pet_id}`}>Edit</Link>
-                    </li>
+                    <PetCard key={pet.pet_id} pet={pet} />
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
