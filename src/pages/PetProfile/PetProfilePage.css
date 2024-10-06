@@ -1,0 +1,73 @@
+.pet-profile-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.pet-image-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pet-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.pet-gallery {
+    display: flex;
+    gap: 10px;
+}
+
+.pet-gallery img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.pet-gallery img:hover {
+    transform: scale(1.1);
+}
+
+.pet-details-section {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pet-details-section h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.pet-details-section .pet-price {
+    font-size: 1.5rem;
+    color: #8B008B;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.pet-characteristics {
+    list-style-type: none;
+    padding: 0;
+}
+
+.pet-characteristics li {
+    margin-bottom: 10px;
+}
+
+.pet-description {
+    margin-top: 30px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
