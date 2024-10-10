@@ -1,6 +1,3 @@
-// src/constants/locations.ts
-
-// List of countries supported by the app
 export const COUNTRIES: string[] = ['Canada', 'United States'];
 
 // Map of provinces/states for each country
@@ -21,7 +18,10 @@ export const PROVINCES: ProvinceMap = {
         'Quebec',
         'Saskatchewan',
     ],
-    'United States': [
+
+};
+export const USPROVINCES: ProvinceMap = {
+    US: [
         'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
         'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana',
         'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
@@ -35,5 +35,9 @@ export const PROVINCES: ProvinceMap = {
 
 // Example of pre-defining common locations for filters or other uses
 export const COMMON_LOCATIONS = {
-    majorCities: ['New York', 'Toronto', 'Vancouver', 'Los Angeles', 'Chicago', 'Houston'],
+    majorCities: ['Toronto', 'Vancouver'],
 };
+
+// export const COMMON_LOCATIONS = {
+//     majorCities: ['New York', 'Toronto', 'Vancouver', 'Los Angeles', 'Chicago', 'Houston'],
+// };
