@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Pet } from '../../types/Pet';
 import './PetCard.css';
 
@@ -11,6 +12,8 @@ type PetCardProps = {
 };
 
 const PetCard: React.FC<PetCardProps> = ({ pet }) => {
+    const navigate = useNavigate();
+
     // Determine the default image based on pet type
     const getDefaultImage = (petType: string) => {
         switch (petType.toLowerCase()) {
@@ -40,8 +43,13 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
     // Determine if the price should be displayed or marked as "Free"
     const displayPrice: string = pet.price && pet.price > 0 ? `₴ ${pet.price.toLocaleString()}` : 'Free';
 
+    // Handle card click to navigate to the pet profile page
+    const handleCardClick = () => {
+        navigate(`/pets/${pet.pet_id}`);
+    };
+
     return (
-        <div className="pet-card">
+        <div className="pet-card" onClick={handleCardClick}>
             <img
                 src={pet.main_image_url || getDefaultImage(pet.pet_type)} // Use pet image if available; otherwise, use default
                 alt={pet.pet_name}
@@ -61,7 +69,6 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
                 </p>
             </div>
             <p className="pet-price">{displayPrice}</p>
-            <a href={`/pets/${pet.pet_id}`}>View Profile</a><a href={`/edit/${pet.pet_id}`}>Edit</a>
         </div>
     );
 };

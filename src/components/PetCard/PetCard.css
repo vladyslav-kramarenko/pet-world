@@ -1,5 +1,5 @@
 .pet-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 16px;
     margin: 16px;
@@ -9,10 +9,15 @@
     align-items: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
+    background-color: var(--background-light);
 }
 
 .pet-card:hover {
     transform: translateY(-5px);
+    border-color: var(--primary-color);
 }
 
 .pet-image {
@@ -21,19 +26,20 @@
     border-radius: 12px;
     object-fit: cover;
     margin-bottom: 12px;
+    border: 2px solid var(--border-color);
 }
 
 .pet-card h3 {
     margin: 0;
     font-size: 20px;
-    color: #333;
+    color: var(--text-primary);
     font-weight: bold;
 }
 
 .pet-card p {
     margin: 4px 0;
     font-size: 14px;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .pet-card .pet-info {
@@ -42,6 +48,7 @@
     justify-content: space-around;
     margin: 12px 0;
     font-size: 14px;
+    color: var(--text-secondary);
 }
 
 .pet-card .icon-location::before {
@@ -62,11 +69,16 @@
 .pet-price {
     font-size: 18px;
     font-weight: bold;
-    color: #6b34e0;
+    color: var(--primary-color);
 }
 
 a {
-    color: #6b34e0;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: bold;
+}
+
+/* Make sure no internal elements catch click events */
+.pet-card * {
+    pointer-events: none;
 }
