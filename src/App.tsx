@@ -1,48 +1,51 @@
 import React from 'react';
 import './App.css';
-// import { Amplify } from 'aws-amplify';
-// import { Authenticator } from '@aws-amplify/ui-react';
-// import '@aws-amplify/ui-react/styles.css';  // Import the UI styles
-// import awsconfig from './aws-exports';
-// import {Router} from "@aws-amplify/ui-react/dist/types/components/Authenticator/Router";
+import awsconfig from './aws-exports';
 import PetList from "./pages/PetList/PetList";
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom'; //
 import PetProfilePage from "./pages/PetProfile/PetProfilePage";
 import CreatePet from "./pages/CreatePet";
 import EditPet from "./pages/EditPet";
+import {Amplify} from "aws-amplify";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import HomePage from "./pages/HomePage/HomePage";
 
 
-// Amplify.configure(awsconfig);
+Amplify.configure(awsconfig);
 
 function App() {
-  // return (
-  //     <Authenticator>
-  //       {({ signOut, user }) => (
-  //           <main>
-  //             <h1>Welcome, {user?.username}</h1>
-  //             <button onClick={signOut}>Sign out</button>
-  //           </main>
-  //       )}
-  //     </Authenticator>
-  // );
     return (
         <Router>
-            <Routes>
-                {/* Route for the home page which lists all pets */}
-                <Route path="/" element={<PetList />} />
+            <Header />
+            <main>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
 
-                {/* Route for viewing a specific pet's profile */}
-                <Route path="/pets/:id" element={<PetProfilePage />} />
+                    <Route path="/pets" element={<PetList />} />
 
-                {/* Route for creating a new pet */}
-                <Route path="/create" element={<CreatePet />} />
+                    {/* Route for viewing a specific pet's profile */}
+                    <Route path="/pets/:id" element={<PetProfilePage />} />
 
-                {/* Route for editing an existing pet */}
-                <Route path="/edit/:id" element={<EditPet />} />
+                    {/* Route for creating a new pet */}
+                    <Route path="/create" element={<CreatePet />} />
 
-                {/* Redirect to the home page if the route doesn't exist */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+                    {/* Route for editing an existing pet */}
+                    <Route path="/edit/:id" element={<EditPet />} />
+
+                    {/* Redirect to the home page if the route doesn't exist */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+
+
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/profile" element={<UserProfilePage />} />
+                </Routes>
+            </main>
+            <Footer />
         </Router>
     );
 }
