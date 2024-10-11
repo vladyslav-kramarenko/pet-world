@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
+
 :root {
   /* Primary color palette */
   --primary-color: #6c63ff;
