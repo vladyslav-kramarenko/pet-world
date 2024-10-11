@@ -1,0 +1,91 @@
+/* General container styles */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background-light);
+}
+
+.register-form {
+    background-color: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+.register-form h1 {
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.register-form p {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.register-form label {
+    display: block;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.register-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.agreement-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.agreement-checkbox input {
+    margin-right: 8px;
+    max-width: 20px;
+    margin-top: 8px;
+    margin-left: 0;
+}
+
+.register-button,
+.confirm-button {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--text-light);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.register-button:hover,
+.confirm-button:hover {
+    background-color: var(--tertiary-color);
+}
+
+.error-message {
+    color: var(--error-color);
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}
