@@ -1,15 +1,22 @@
 import json
 import boto3
 from botocore.exceptions import ClientError
+from decimal import Decimal
 
 # Initialize DynamoDB resource
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('Pets')
 
+# Helper function to convert Decimal to float for JSON serialization
+def decimal_default(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)  # Convert Decimal to float for JSON serialization
+    raise TypeError
+
 def lambda_handler(event, context):
     try:
         # Get the pet_id from the path parameters
-        pet_id = event['pathParameters']['pet_id']
+        pet_id = event['pathParameters']['id']
 
         # Parse the request body to get updated data
         updated_data = json.loads(event['body'])
@@ -34,18 +41,18 @@ def lambda_handler(event, context):
             ReturnValues='UPDATED_NEW'
         )
 
-        # Return a success response
+        # Return a success response with Decimal values converted to float
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': 'http://localhost:3000',  # Update this to your frontend URL in production
+                'Access-Control-Allow-Origin': '*',  # Adjust this for your production environment
                 'Access-Control-Allow-Headers': 'Content-Type,Authorization',
                 'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE',
             },
             'body': json.dumps({
                 'message': 'Pet updated successfully',
                 'updated_attributes': response['Attributes']
-            })
+            }, default=decimal_default)  # Use the decimal_default function to handle Decimal conversion
         }
 
     except ClientError as e:
@@ -53,7 +60,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 500,
             'headers': {
-                'Access-Control-Allow-Origin': 'http://localhost:3000',  # Update this to your frontend URL in production
+                'Access-Control-Allow-Origin': '*',  # Adjust this for your production environment
                 'Access-Control-Allow-Headers': 'Content-Type,Authorization',
                 'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE',
             },

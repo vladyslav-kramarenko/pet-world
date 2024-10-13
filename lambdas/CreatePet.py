@@ -1,5 +1,3 @@
-# src/lambdas/create_pet_lambda.py
-
 import json
 import boto3
 import uuid
@@ -38,9 +36,19 @@ def lambda_handler(event, context):
             'description': pet_data.get('description', 'No description'),
             'price': Decimal(str(pet_data.get('price', 0))),  # Convert price to Decimal
             'gender': pet_data.get('gender', 'Unknown'),
-            'health_status': pet_data.get('health_status', []),  # Default to empty list
-            'documents': pet_data.get('documents', []),          # Default to empty list
-            'image_url': pet_data.get('image_url', '')
+            'main_image_url': pet_data.get('main_image_url', ''),
+            'owner_id': pet_data.get('owner_id', ''),
+            'contact_name': pet_data.get('contact_name', ''),
+            'contact_phone': pet_data.get('contact_phone', ''),
+
+            # Health status and documents (default false)
+            'isSterilized': pet_data.get('isSterilized', False),
+            'isVaccinated': pet_data.get('isVaccinated', False),
+            'hasChip': pet_data.get('hasChip', False),
+            'hasPedigree': pet_data.get('hasPedigree', False),
+            'hasFCICertificate': pet_data.get('hasFCICertificate', False),
+            'hasParasiteTreatment': pet_data.get('hasParasiteTreatment', False),
+            'hasVetPassport': pet_data.get('hasVetPassport', False)
         }
 
         # Log the item being inserted
@@ -52,6 +60,11 @@ def lambda_handler(event, context):
         # Success response
         return {
             'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',  # Adjust this for your production environment
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'OPTIONS,GET,POST,PUT,DELETE',
+            },
             'body': json.dumps({'message': 'Pet created successfully', 'pet_id': pet_id})
         }
 
