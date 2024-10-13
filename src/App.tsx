@@ -4,8 +4,8 @@ import awsconfig from './aws-exports';
 import PetList from "./pages/PetList/PetList";
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom'; //
 import PetProfilePage from "./pages/PetProfile/PetProfilePage";
-import CreatePet from "./pages/CreatePet";
-import EditPet from "./pages/EditPet";
+import CreatePet from "./pages/CreatePetPage";
+import EditPet from "./pages/EditPetPage/EditPetPage";
 import {Amplify} from "aws-amplify";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -34,7 +34,7 @@ function App() {
                     <Route path="/create" element={<CreatePet />} />
 
                     {/* Route for editing an existing pet */}
-                    <Route path="/edit/:id" element={<EditPet />} />
+                    <Route path="/pets/:id/edit" element={<EditPet />} />
 
                     {/* Redirect to the home page if the route doesn't exist */}
                     <Route path="*" element={<Navigate to="/" replace />} />
