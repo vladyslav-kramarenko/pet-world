@@ -1,11 +1,13 @@
-// src/components/PetList.tsx
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
+import PetCard from '../../components/PetCard/PetCard';
+import { fetchPetsWithFilters } from '../../services/apiService';
+import { Pet } from '../../types/Pet';
+import { PET_TYPES } from '../../constants/petAttributes'; // Import the pet categories
+import { PROVINCES } from '../../constants/locations'; // Import the province list
 import './PetList.css';
-import {fetchPetsWithFilters} from "../../services/apiService";
-import {Pet} from "../../types/Pet";
-import PetCard from "../../components/PetCard/PetCard"; // Import the CSS file
+
+const AGE_CATEGORIES = ['Baby', 'Adult', 'Senior']; // Define age categories
 
 const PetList: React.FC = () => {
     const [pets, setPets] = useState<Pet[]>([]);
@@ -13,20 +15,38 @@ const PetList: React.FC = () => {
         type: '',
         age: '',
         sort: 'name',
-        country: '',
+        country: 'Canada',
         province: '',
         town: '',
     });
 
+    // Hook to parse query parameters from the URL
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+    };
+
+    const query = useQuery();
+    const categoryFromURL = query.get('category') || '';
+    const provinceFromURL = query.get('province') || '';
+
     // Fetch pets based on filters
     const fetchPets = async () => {
         try {
-            const petsData = await fetchPetsWithFilters(filters); // Use the API service function
+            const petsData = await fetchPetsWithFilters(filters);
             setPets(petsData);
         } catch (error) {
             console.error('Error fetching pets:', error);
         }
     };
+
+    // Set filters based on URL parameters when the component mounts
+    useEffect(() => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            type: categoryFromURL,
+            province: provinceFromURL,
+        }));
+    }, [categoryFromURL, provinceFromURL]);
 
     // Fetch pets whenever the filters change
     useEffect(() => {
@@ -34,60 +54,80 @@ const PetList: React.FC = () => {
     }, [filters]);
 
     // Handle input changes for each filter field
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
         setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
     };
+
 
     return (
         <div className="pet-list-container">
             <div className="filters">
                 <h3>Filters:</h3>
+                {/* Pet Type Filter */}
                 <label>
                     Type:
-                    <input
-                        type="text"
+                    <select
                         name="type"
                         value={filters.type}
                         onChange={handleInputChange}
-                    />
+                    >
+                        <option value="">All Types</option>
+                        {PET_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
+                        ))}
+                    </select>
                 </label>
+
+                {/* Age Category Filter */}
                 <label>
                     Age:
-                    <input
-                        type="text"
+                    <select
                         name="age"
                         value={filters.age}
                         onChange={handleInputChange}
-                    />
+                    >
+                        <option value="">All Ages</option>
+                        {AGE_CATEGORIES.map((age) => (
+                            <option key={age} value={age}>
+                                {age}
+                            </option>
+                        ))}
+                    </select>
                 </label>
-                <label>
-                    Country:
-                    <input
-                        type="text"
-                        name="country"
-                        value={filters.country}
-                        onChange={handleInputChange}
-                    />
-                </label>
+
+                {/* Province Filter */}
                 <label>
                     Province:
-                    <input
-                        type="text"
+                    <select
                         name="province"
                         value={filters.province}
                         onChange={handleInputChange}
-                    />
+                    >
+                        <option value="">All Provinces</option>
+                        {PROVINCES.Canada.map((province) => (
+                            <option key={province} value={province}>
+                                {province}
+                            </option>
+                        ))}
+                    </select>
                 </label>
+
+                {/* Town Filter */}
                 <label>
                     Town:
                     <input
                         type="text"
                         name="town"
                         value={filters.town}
+                        placeholder="Enter town"
                         onChange={handleInputChange}
                     />
                 </label>
+
+                {/* Sort by Filter */}
                 <label>
                     Sort by:
                     <select name="sort" value={filters.sort} onChange={handleInputChange}>
@@ -100,9 +140,13 @@ const PetList: React.FC = () => {
 
             {/* List of Pets */}
             <div className="pet-list">
-                {pets.map((pet) => (
-                    <PetCard key={pet.pet_id} pet={pet} />
-                ))}
+                {pets.length > 0 ? (
+                    pets.map((pet) => (
+                        <PetCard key={pet.pet_id} pet={pet} />
+                    ))
+                ) : (
+                    <p>No pets found matching the selected criteria.</p>
+                )}
             </div>
         </div>
     );
