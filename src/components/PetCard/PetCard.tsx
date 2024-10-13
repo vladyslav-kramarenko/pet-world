@@ -9,9 +9,10 @@ import defaultPet from '../../assets/paw.png'; // General default image for othe
 
 type PetCardProps = {
     pet: Pet;
+    onClick?: () => void;
 };
 
-const PetCard: React.FC<PetCardProps> = ({ pet }) => {
+const PetCard: React.FC<PetCardProps> = ({ pet, onClick }) => {
     const navigate = useNavigate();
 
     // Determine the default image based on pet type
@@ -43,12 +44,12 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
     // Determine if the price should be displayed or marked as "Free"
     const displayPrice: string = pet.price && pet.price > 0 ? `₴ ${pet.price.toLocaleString()}` : 'Free';
 
-    const handleCardClick = () => {
+    const defaultHandleCardClick = () => {
         navigate(`/pets/${pet.pet_id}`);
     };
 
     return (
-        <div className="pet-card" onClick={handleCardClick}>
+        <div className="pet-card" onClick={onClick || defaultHandleCardClick}>
             <img
                 src={pet.main_image_url || getDefaultImage(pet.pet_type)} // Use pet image if available; otherwise, use default
                 alt={pet.pet_name}
