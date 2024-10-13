@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
-import './UserProfilePage.css'; // Import the CSS file for styling
+import PetCard from '../../components/PetCard/PetCard'; // Import PetCard component
+import './UserProfilePage.css';
+import { fetchPetsByOwner } from "../../services/apiService";
 
 const UserProfilePage: React.FC = () => {
     const [userDetails, setUserDetails] = useState<any>(null);
@@ -9,6 +11,7 @@ const UserProfilePage: React.FC = () => {
     const [lastName, setLastName] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [pets, setPets] = useState<any[]>([]); // Store pets owned by the user
     const navigate = useNavigate();
 
     // Fetch the user details from the server
@@ -19,13 +22,16 @@ const UserProfilePage: React.FC = () => {
                 setUserDetails(userAttributes);
                 setFirstName(userAttributes.given_name || '');
                 setLastName(userAttributes.family_name || '');
-            } catch (err) {
+                const ownedPets = await fetchPetsByOwner(userAttributes.sub); // Fetch pets by owner
+                setPets(ownedPets);
+            } catch (err: any) {
                 console.error('Error fetching user details:', err);
                 setError('Unable to fetch user details. Please try again.');
-                navigate('/login', { state: { message: 'Please log in to access your profile.' } });
+                if (err.message.includes('User needs to be authenticated')) {
+                    navigate('/login', { state: { message: 'Please log in to access your profile.' } });
+                }
             }
         };
-
         fetchUserDetails();
     }, [navigate]);
 
@@ -40,38 +46,54 @@ const UserProfilePage: React.FC = () => {
         }
     };
 
+    // Handle edit pet click
+    const handleEditPet = (petId: string) => {
+        navigate(`/pets/${petId}/edit`);
+    };
+
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
     if (!userDetails) return <p>Loading user details...</p>;
 
     return (
-        <div className="user-profile-container">
-            <div className="user-profile">
-                <h1>Welcome, {firstName}</h1>
-                <p>Email: {userDetails.email}</p>
+        <div className="profile-page-container">
+            <div className="profile-section">
+                <h1>Profile Settings</h1>
+                <div className="profile-details">
+                    <p>Email: {userDetails.email}</p>
+                    <label>
+                        First Name:
+                        <input
+                            type="text"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="profile-input"
+                        />
+                    </label>
+                    <label>
+                        Last Name:
+                        <input
+                            type="text"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="profile-input"
+                        />
+                    </label>
+                    <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
+                    {successMessage && <p className="success-message">{successMessage}</p>}
+                </div>
+            </div>
 
-                <label>
-                    First Name:
-                    <input
-                        type="text"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="profile-input"
-                    />
-                </label>
-                <br />
-                <label>
-                    Last Name:
-                    <input
-                        type="text"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="profile-input"
-                    />
-                </label>
-                <br />
-                <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
-
-                {successMessage && <p className="success-message">{successMessage}</p>}
+            <div className="pets-section">
+                <h2>Your Pets</h2>
+                <div className="pets-grid">
+                    {pets.map(pet => (
+                        <PetCard
+                            key={pet.pet_id}
+                            pet={pet}
+                            onClick={() => handleEditPet(pet.pet_id)}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );

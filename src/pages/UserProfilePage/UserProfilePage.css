@@ -1,32 +1,34 @@
-.user-profile-container {
+.profile-page-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh; /* Make sure the profile page takes the full height */
+    justify-content: space-around;
+    padding: 20px;
 }
 
-.user-profile {
-    width: 400px;
+.profile-section, .pets-section {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 30px;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
+}
+
+.profile-section h1, .pets-section h2 {
     text-align: center;
-}
-
-.user-profile h1 {
     margin-bottom: 20px;
-    font-size: 1.8rem;
 }
 
-.user-profile p {
-    font-size: 1rem;
-    margin-bottom: 10px;
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 label {
-    display: block;
     font-size: 1.1rem;
     margin-top: 10px;
 }
@@ -59,4 +61,20 @@ label {
     margin-top: 15px;
     color: green;
     font-size: 1rem;
+}
+
+.pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.pets-grid img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.pets-grid img:hover {
+    transform: scale(1.05);
 }
