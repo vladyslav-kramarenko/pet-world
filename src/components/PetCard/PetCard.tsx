@@ -43,7 +43,6 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
     // Determine if the price should be displayed or marked as "Free"
     const displayPrice: string = pet.price && pet.price > 0 ? `₴ ${pet.price.toLocaleString()}` : 'Free';
 
-    // Handle card click to navigate to the pet profile page
     const handleCardClick = () => {
         navigate(`/pets/${pet.pet_id}`);
     };
@@ -56,7 +55,7 @@ const PetCard: React.FC<PetCardProps> = ({ pet }) => {
                 className="pet-image"
             />
             <h3>{pet.pet_name}</h3>
-            <p>{pet.description}</p>
+            {/*<p>{pet.description}</p>*/}
             <div className="pet-info">
                 <p>
                     <span className="icon-location"></span> {pet.province}, {pet.country}

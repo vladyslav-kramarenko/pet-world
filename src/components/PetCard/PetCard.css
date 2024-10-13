@@ -20,6 +20,10 @@
     border-color: var(--primary-color);
 }
 
+.pet-card .pet-info p{
+    text-align: left;
+}
+
 .pet-image {
     width: 280px;
     height: 280px;
@@ -40,6 +44,7 @@
     margin: 4px 0;
     font-size: 14px;
     color: var(--text-secondary);
+    text-align: left;
 }
 
 .pet-card .pet-info {
@@ -86,3 +91,12 @@ a {
 .pet-card * {
     pointer-events: none;
 }
+
+@media (max-width: 650px) {
+
+    .pet-card {
+        width: 100%;
+        margin: 0;
+    }
+}
+
