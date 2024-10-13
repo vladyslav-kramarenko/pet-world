@@ -15,13 +15,25 @@
     width: 100%;
     height: auto;
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;
+}
+
+.pet-description {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .pet-gallery {
     display: flex;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .pet-gallery img {
@@ -41,7 +53,7 @@
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .pet-details-section h2 {
@@ -66,8 +78,24 @@
     margin-bottom: 10px;
 }
 
-.pet-description {
-    margin-top: 30px;
-    font-size: 1.1rem;
-    line-height: 1.6;
+.pet-details-section .icon-location::before {
+    content: '📍';
+    margin-right: 4px;
+}
+
+.pet-details-section .icon-gender::before {
+    content: '⚥';
+    margin-right: 9px;
+    margin-left: 5px;
+}
+
+.pet-details-section .icon-age::before {
+    content: '📅';
+    margin-right: 4px;
+}
+
+@media (max-width: 650px) {
+    .pet-profile-container{
+        flex-direction: column;
+    }
 }

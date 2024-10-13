@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { fetchPetById } from '../../services/apiService';
 import { Pet } from '../../types/Pet';
 import './PetProfilePage.css';
+import defaultDog from '../../assets/dog.png';
+import defaultCat from '../../assets/cat.jpg';
+import defaultPet from '../../assets/paw.png'; // General default image for other types
 
 const PetProfilePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -10,6 +13,17 @@ const PetProfilePage: React.FC = () => {
 
     const [pet, setPet] = useState<Pet | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const getDefaultImage = (petType: string) => {
+        switch (petType.toLowerCase()) {
+            case 'dog':
+                return defaultDog;
+            case 'cat':
+                return defaultCat;
+            default:
+                return defaultPet; // General default for other pet types
+        }
+    };
 
     useEffect(() => {
         const fetchPet = async () => {
@@ -36,35 +50,44 @@ const PetProfilePage: React.FC = () => {
 
     return (
         <div className="pet-profile-container">
-            {/* Use your styled layout and structure here */}
             <div className="pet-image-section">
                 {/* Render the main image */}
-                <img src={pet.main_image_url || '/path/to/default/image.jpg'} alt={pet.pet_name} className="pet-image" />
+                <img
+                    src={pet.main_image_url || getDefaultImage(pet.pet_type)}
+                    alt={pet.pet_name}
+                    className="pet-image"
+                />
+
+                {/* Pet Description Moved Here */}
+                <div className="pet-description">
+                    <h3>Description:</h3>
+                    <p>{pet.description}</p>
+                </div>
 
                 {/* Render the image gallery */}
                 <div className="pet-gallery">
                     {pet.images?.map((imageUrl, index) => (
-                        <img key={index} src={imageUrl} alt={`Gallery ${index}`} className="pet-thumbnail" />
+                        <img
+                            key={index}
+                            src={imageUrl}
+                            alt={`Gallery ${index}`}
+                            className="pet-thumbnail"
+                        />
                     ))}
                 </div>
             </div>
 
             <div className="pet-details-section">
                 <h2 className="pet-name">{pet.pet_name}</h2>
-                <p className="pet-price">{pet.price ? `₴ ${pet.price.toLocaleString()}` : 'Free'}</p>
+                <p className="pet-price">{pet.price ? `$ ${pet.price.toLocaleString()}` : 'Free'}</p>
 
                 {/* Pet Characteristics */}
                 <ul className="pet-characteristics">
                     <li>Type: {pet.pet_type}</li>
                     <li>Age: {pet.age}</li>
-                    <li>Location: {`${pet.town}, ${pet.province}, ${pet.country}`}</li>
-                    <li>Gender: {pet.gender}</li>
+                    <li><span className="icon-location"></span>: {`${pet.town}, ${pet.province}, ${pet.country}`}</li>
+                    <li><span className="icon-gender"></span>: {pet.gender}</li>
                 </ul>
-
-                <div className="pet-description">
-                    <h3>Description:</h3>
-                    <p>{pet.description}</p>
-                </div>
             </div>
         </div>
     );
