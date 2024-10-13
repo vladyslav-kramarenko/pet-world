@@ -1,0 +1,95 @@
+.pet-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 50px 50px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px; /* Add spacing between form groups */
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    width: 100%;
+}
+
+textarea {
+    resize: none;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 15px; /* Add space below checkbox groups */
+}
+
+.health-section,
+.document-section {
+    font-weight: bold;
+    margin-top: 20px; /* Add spacing between sections */
+}
+
+/* Labels for checkboxes */
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px; /* Space between checkbox and label */
+    accent-color: #4CAF50; /* Custom checkbox color */
+}
+
+.checkbox-group input[type="checkbox"]:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+/* Add styling for mandatory fields */
+.form-group label::after {
+    content: "*";
+    color: red;
+    margin-left: 5px;
+}
+
+/* Styling for image pickers */
+.form-group input[type="file"] {
+    padding: 5px;
+    border: none;
+    font-size: 0.9rem;
+}
