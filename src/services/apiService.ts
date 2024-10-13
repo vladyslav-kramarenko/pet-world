@@ -1,10 +1,7 @@
-// src/services/apiService.ts
-
 import axios from 'axios';
 import { Pet } from '../types/Pet';
 import { API_BASE_URL } from '../config';
 
-// Base URL for API
 const API_URL = `${API_BASE_URL}/pets`;
 
 /**
@@ -96,6 +93,19 @@ export const deletePet = async (petId: string): Promise<void> => {
         await axios.delete(`${API_URL}/${petId}`);
     } catch (error) {
         console.error('Error deleting pet:', error);
+        throw error;
+    }
+};
+
+/**
+ * fetch pets by owner.
+ */
+export const fetchPetsByOwner = async (ownerId: string | undefined) => {
+    try {
+        const response = await axios.get(`${API_URL}/owner/${ownerId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching pets by owner:', error);
         throw error;
     }
 };
