@@ -15,6 +15,7 @@ const Header: React.FC = () => {
                 const currentUser = await AuthService.getCurrentUser(); // Get the current user
                 setUser(currentUser);
             } catch (err) {
+                console.error('Error checking user authentication:', err);
                 setUser(null); // If no user is authenticated, set the user to null
             }
         };
