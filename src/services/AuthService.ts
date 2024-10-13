@@ -7,6 +7,7 @@ import {
     getCurrentUser as amplifyGetCurrentUser,
     fetchUserAttributes as amplifyFetchUserAttributes,
     updateUserAttributes as amplifyUpdateUserAttributes,
+    resetPassword as amplifyResetPassword,
     SignUpInput,
     ResendSignUpCodeInput,
     UpdateUserAttributesInput
@@ -180,6 +181,29 @@ const AuthService = {
         } catch (err) {
             console.error('Error signing out:', err);
             throw err;
+        }
+    },
+
+    /**
+     * Triggers the reset password process by sending a verification code to the user.
+     *
+     * @param email - The email of the user requesting the reset.
+     * @returns A promise that resolves when the code is sent.
+     */
+    async forgotPassword(email: string) {
+        const input = {
+            username: email,
+            options: {
+                clientMetadata: {}, // Optional metadata if needed
+            },
+        };
+
+        try {
+            const result = await amplifyResetPassword(input);
+            return result;
+        } catch (error) {
+            console.error('Error during password reset:', error);
+            throw error;
         }
     }
 };
