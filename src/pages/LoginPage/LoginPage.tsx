@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
 import './LoginPage.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface LocationState {
     state?: {
@@ -14,7 +15,7 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState(''); // For any messages passed from RegisterPage or redirection
-
+    const [showPassword, setShowPassword] = useState<boolean>(false); // Toggle password visibility
     const navigate = useNavigate();
     const location = useLocation() as LocationState;
 
@@ -37,6 +38,10 @@ const LoginPage: React.FC = () => {
         }
     };
 
+    const handleForgotPassword = () => {
+        navigate('/forgot-password', { state: { email } }); // Navigate to Forgot Password page
+    };
+
     return (
         <div className="loginPage-container">
             <div className="login-container">
@@ -52,15 +57,28 @@ const LoginPage: React.FC = () => {
                         required
                     />
                     <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit">Login</button>
+                    <div className="password-input-container">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="toggle-password-visibility"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
+                    </div>
+                    <button className="submit-button" type="submit">Login</button>
                 </form>
                 {error && <p style={{color: 'red'}}>{error}</p>}
+
+                <p className="forgot-password-link" onClick={handleForgotPassword}>
+                    Forgot your password?
+                </p>
             </div>
         </div>
     );
