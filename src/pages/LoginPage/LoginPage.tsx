@@ -1,35 +1,48 @@
-import React, {useState} from 'react';
-import AuthService from '../../services/AuthService'; // Use the updated AuthService
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import AuthService from '../../services/AuthService';
 import './LoginPage.css';
+
+interface LocationState {
+    state?: {
+        message?: string;
+    };
+}
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState(''); // For any messages passed from RegisterPage or redirection
+
     const navigate = useNavigate();
+    const location = useLocation() as LocationState;
+
+    // On component mount, check if there is a message passed via navigation state
+    useEffect(() => {
+        if (location.state?.message) {
+            setMessage(location.state.message);
+        }
+    }, [location.state]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
-        setLoading(true);
+        setError(''); // Clear any previous errors
 
         try {
-            await AuthService.signIn(email, password); // Using AuthService
+            await AuthService.signIn(email, password);
             navigate('/profile');  // Navigate to profile page upon successful login
         } catch (err) {
-            console.error('Login failed:', err);
             setError('Login failed. Please check your credentials.');
-        } finally {
-            setLoading(false);
         }
     };
 
     return (
-        <div className={"loginPage-container"}>
+        <div className="loginPage-container">
             <div className="login-container">
                 <h1>Login</h1>
+                {/* Display message if passed from RegisterPage or redirect */}
+                {message && <p style={{color: 'green'}}>{message}</p>}
                 <form onSubmit={handleLogin}>
                     <label>Email:</label>
                     <input
@@ -45,9 +58,7 @@ const LoginPage: React.FC = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Login'}
-                    </button>
+                    <button type="submit">Login</button>
                 </form>
                 {error && <p style={{color: 'red'}}>{error}</p>}
             </div>
