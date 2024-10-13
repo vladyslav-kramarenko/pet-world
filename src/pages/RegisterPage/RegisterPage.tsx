@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import AuthService from '../../services/AuthService';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import './RegisterPage.css'; // Import CSS for styling
 
 const RegisterPage: React.FC = () => {
@@ -28,6 +28,7 @@ const RegisterPage: React.FC = () => {
             return () => clearTimeout(timer);
         }
     }, [resendCooldown]);
+
     const validatePassword = (password: string) =>
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,}$/.test(password);
 
@@ -44,9 +45,7 @@ const RegisterPage: React.FC = () => {
         }
 
         if (!validatePassword(password)) {
-            setError(
-                'Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.'
-            );
+            setError('Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.');
             return;
         }
 
@@ -54,47 +53,36 @@ const RegisterPage: React.FC = () => {
         setLoading(true);
 
         try {
-            const result = await AuthService.signUp(email, password);
+            const result = await AuthService.signUp(email, password, firstName, lastName);
             console.log('User sign-up result:', result);
             setIsConfirmationRequired(true); // Proceed to confirmation stage
-        } catch (err: unknown) {
-            console.error('Error registering user:', err);
-
-            // Type guard to check if err is an object with the "name" or "code" property
-            if (err instanceof Error && ('name' in err || 'code' in err)) {
-                // Check for UsernameExistsException using name or code
-                if ((err as any).name === 'UsernameExistsException' || (err as any).code === 'UsernameExistsException') {
-                    setError('This email is already registered. Would you like to resend the confirmation code?');
-                    setIsConfirmationRequired(true); // Assume the user needs to confirm the registration
-                } else {
-                    setError('Registration failed. Please try again.');
-                }
+        } catch (err: any) {
+            if (err.name === 'UsernameExistsException' || err.code === 'UsernameExistsException') {
+                navigate('/login', {state: {message: 'This email is already registered. Please log in.'}});
             } else {
-                setError('An unknown error occurred.');
+                console.error('Error registering user:', err);
+                setError('Registration failed. Please try again.');
             }
         } finally {
             setLoading(false);
         }
     };
 
+
     // Confirm user registration
     const handleConfirmation = async () => {
         try {
             setLoading(true);
             await AuthService.confirmSignUp(email, confirmationCode);
-            setError(''); // Clear any existing errors
-            setTimeout(() => {
-                navigate('/login'); // Redirect to login page after a delay
-            }, 3000); // Delay navigation by 3 seconds to show confirmation message
-            setError('Confirmation successful! You will be redirected to login.');
+            setError('Confirmation successful! Please log in.');
+            setTimeout(() => navigate('/login'), 2000); // After success, navigate to login after a short delay
         } catch (err) {
             console.error('Error confirming sign up:', err);
-            setError('Confirmation failed. Please try again.');
+            setError('Confirmation failed, please try again.');
         } finally {
             setLoading(false);
         }
     };
-
 
     // Resend confirmation code (with cooldown)
     const handleResendCode = async () => {
@@ -155,12 +143,13 @@ const RegisterPage: React.FC = () => {
                                     className="toggle-password-visibility"
                                     onClick={() => setShowPassword(!showPassword)}
                                 >
-                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    {showPassword ? <FaEyeSlash/> : <FaEye/>}
                                 </button>
                             </div>
                             {password && (
                                 <p className="password-requirements">
-                                    Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.
+                                    Password must be at least 8 characters long, include an uppercase letter, a number,
+                                    and a special character.
                                 </p>
                             )}
                             <label>Confirm Password*</label>
@@ -177,7 +166,7 @@ const RegisterPage: React.FC = () => {
                                     className="toggle-password-visibility"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 >
-                                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                    {showConfirmPassword ? <FaEyeSlash/> : <FaEye/>}
                                 </button>
                             </div>
                             <div className="agreement-checkbox">
@@ -191,7 +180,8 @@ const RegisterPage: React.FC = () => {
                                     I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>.
                                 </label>
                             </div>
-                            <button type="button" onClick={handleRegister} className="register-button" disabled={loading}>
+                            <button type="button" onClick={handleRegister} className="register-button"
+                                    disabled={loading}>
                                 {loading ? 'Registering...' : 'Register'}
                             </button>
                             {error && <p className="error-message">{error}</p>}
@@ -208,7 +198,8 @@ const RegisterPage: React.FC = () => {
                             placeholder="Confirmation Code"
                             required
                         />
-                        <button type="button" onClick={handleConfirmation} className="confirm-button" disabled={loading}>
+                        <button type="button" onClick={handleConfirmation} className="confirm-button"
+                                disabled={loading}>
                             {loading ? 'Confirming...' : 'Confirm'}
                         </button>
                         <button
@@ -220,12 +211,11 @@ const RegisterPage: React.FC = () => {
                             {resendCooldown > 0 ? `Resend Code in ${resendCooldown}s` : 'Resend Confirmation Code'}
                         </button>
                         {error && <p className="error-message">{error}</p>}
-                        <p className="login-link">
-                            This email is already registered. Would you like to resend the confirmation code? <br />
-                            Already have an account? <a href="/login">Login</a>
-                        </p>
                     </>
                 )}
+                <p className="login-link">
+                    Already have an account? <a href="/login">Login</a>
+                </p>
             </div>
         </div>
     );
