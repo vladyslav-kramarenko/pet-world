@@ -18,31 +18,33 @@
     align-items: center;
 }
 
-.logo h2{
+.logo h2 {
     font-size: 24px;
 }
-
 
 .nav-links a {
     margin-right: 15px;
     text-decoration: none;
     color: white;
+    font-weight: 700;
 }
 
-.nav-links .signout-button {
+.nav-links button {
     background-color: transparent;
     border: none;
     color: white;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: none; /* Remove underline for button */
+    font-weight: 700;
+    margin-right: 15px; /* Same spacing as other links */
 }
 
 .nav-links a:hover,
-.nav-links .signout-button:hover {
+.nav-links button:hover {
     color: #aaa;
 }
 
-.logo .logo-wrapper{
+.logo .logo-wrapper {
     background-color: var(--tertiary-color);
     padding: 5px;
     width: 60px;
@@ -58,16 +60,17 @@
 }
 
 @media (max-width: 800px) {
-    .logo h2{
+    .logo h2 {
         font-size: 20px;
     }
 
-    .logo .logo-wrapper{
+    .logo .logo-wrapper {
         padding: 5px;
         width: 40px;
         height: 40px;
         margin: 0 20px 0 0;
     }
+
     .logo img {
         width: 30px;
         height: 30px;
