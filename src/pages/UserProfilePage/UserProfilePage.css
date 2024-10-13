@@ -1,0 +1,62 @@
+.user-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Make sure the profile page takes the full height */
+}
+
+.user-profile {
+    width: 400px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.user-profile h1 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.user-profile p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+.profile-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.save-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #45a049;
+}
+
+.success-message {
+    margin-top: 15px;
+    color: green;
+    font-size: 1rem;
+}
