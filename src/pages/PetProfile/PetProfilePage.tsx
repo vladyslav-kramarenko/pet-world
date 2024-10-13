@@ -84,7 +84,7 @@ const PetProfilePage: React.FC = () => {
                 {/* Pet Characteristics */}
                 <ul className="pet-characteristics">
                     <li>Type: {pet.pet_type}</li>
-                    <li>Age: {pet.age}</li>
+                    <li>Age: {pet.exact_age}</li>
                     <li><span className="icon-location"></span>: {`${pet.town}, ${pet.province}, ${pet.country}`}</li>
                     <li><span className="icon-gender"></span>: {pet.gender}</li>
                 </ul>
