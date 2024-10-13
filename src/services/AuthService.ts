@@ -118,7 +118,11 @@ const AuthService = {
         try {
             const user = await amplifyGetCurrentUser();
             return user;
-        } catch (err) {
+        } catch (err: any) {
+            if (err.name === 'UserUnAuthenticatedException') {
+                console.warn('User is not authenticated');
+                return null; // Return null if the user is not authenticated
+            }
             console.error('Error fetching current user:', err);
             throw err;
         }
