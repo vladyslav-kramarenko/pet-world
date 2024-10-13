@@ -12,36 +12,39 @@ const PetDetails: React.FC<PetDetailsProps> = ({ pet }) => {
             {/* Contact Information */}
             <div className="pet-contact">
                 <h3>Contact</h3>
-                <p>Contact Person: Maria</p>
-                <p>Phone Number: +1 (123) 456-7890</p>
+                <p>Contact Person: {pet.contact_name}</p>
+                <p>Phone Number: {pet.contact_phone}</p>
             </div>
 
             {/* Characteristics */}
             <div className="pet-characteristics">
                 <h3>Characteristics</h3>
                 <p><span>Type: </span>{pet.pet_type}</p>
-                <p><span>Breed: </span>Unknown</p>
                 <p><span>Gender: </span>{pet.gender}</p>
-                <p><span>Age: </span>{pet.age}</p>
-                <p><span>Color: </span>Brown</p>
-                <p><span>Location: </span>{pet.province}, {pet.country}</p>
+                <p><span>Age: </span>{pet.exact_age}</p>
+                <p><span>Location: </span>{pet.town}, {pet.province}, {pet.country}</p>
                 <p><span>Owner: </span>Private Owner</p>
             </div>
 
             {/* Health Status */}
             <div className="pet-health">
                 <h3>Health Status</h3>
-                {pet.health_status?.map((status, index) => (
-                    <span key={index} className="tag health-tag">{status}</span>
-                ))}
+                <div className="health-tags">
+                    {pet.isSterilized && <span className="tag health-tag">Sterilized</span>}
+                    {pet.isVaccinated && <span className="tag health-tag">Vaccinated</span>}
+                    {pet.hasChip && <span className="tag health-tag">Chipped</span>}
+                    {pet.hasParasiteTreatment && <span className="tag health-tag">Parasite Treated</span>}
+                </div>
             </div>
 
             {/* Documents */}
             <div className="pet-documents">
                 <h3>Documents</h3>
-                {pet.documents?.map((doc, index) => (
-                    <span key={index} className="tag document-tag">{doc}</span>
-                ))}
+                <div className="document-tags">
+                    {pet.hasVetPassport && <span className="tag document-tag">Vet Passport</span>}
+                    {pet.hasPedigree && <span className="tag document-tag">Pedigree</span>}
+                    {pet.hasFCICertificate && <span className="tag document-tag">FCI Certificate</span>}
+                </div>
             </div>
         </div>
     );

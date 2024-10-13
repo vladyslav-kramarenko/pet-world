@@ -1,26 +1,75 @@
 .pet-details {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .pet-contact, .pet-characteristics, .pet-health, .pet-documents {
-    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+}
+
+.pet-contact h3, .pet-characteristics h3, .pet-health h3, .pet-documents h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.pet-contact p, .pet-characteristics p {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #666;
 }
 
 .tag {
     display: inline-block;
-    margin: 5px;
-    padding: 5px 10px;
-    border-radius: 4px;
+    margin: 5px 10px 5px 0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
     background-color: #f0f0f0;
     border: 1px solid #ddd;
+    color: #333;
 }
 
 .health-tag {
     background-color: #e6f7e6;
+    color: #388e3c;
+    border-color: #b7e2b7;
 }
 
 .document-tag {
     background-color: #e6e6f7;
+    color: #5a67d8;
+    border-color: #b7b7e2;
+}
+
+.health-tags, .document-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .pet-details {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .pet-contact h3, .pet-characteristics h3, .pet-health h3, .pet-documents h3 {
+        font-size: 1.3rem;
+    }
+
+    .tag {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
 }
