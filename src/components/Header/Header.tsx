@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signOut, getCurrentUser } from '@aws-amplify/auth'; // Import signOut and getCurrentUser from Amplify
+import AuthService from '../../services/AuthService';
 import './Header.css';
-import logo from "../../assets/logo_white.png"; // Create a CSS file for styling the header
+import logo from "../../assets/logo_white.png";
 
 const Header: React.FC = () => {
     const [user, setUser] = useState<any>(null); // State to track authenticated user
@@ -12,8 +12,8 @@ const Header: React.FC = () => {
     useEffect(() => {
         const checkUser = async () => {
             try {
-                const currentUser = await getCurrentUser(); // Get the current user
-                setUser(currentUser); // Set the user state
+                const currentUser = await AuthService.getCurrentUser(); // Get the current user
+                setUser(currentUser);
             } catch (err) {
                 setUser(null); // If no user is authenticated, set the user to null
             }
@@ -24,9 +24,9 @@ const Header: React.FC = () => {
     // Handle user sign out
     const handleSignOut = async () => {
         try {
-            await signOut(); // Sign the user out
+            await AuthService.signOut();
             setUser(null); // Clear the user state
-            navigate('/login'); // Navigate to the login page
+            navigate('/login');
         } catch (err) {
             console.error('Error signing out:', err);
         }
@@ -37,22 +37,20 @@ const Header: React.FC = () => {
             <div className="header-content">
                 <Link to="/" className="logo">
                     <div className={"logo-wrapper"}>
-                        <img src={logo} alt="PetWorld Logo"/>
+                        <img src={logo} alt="PetWorld Logo" />
                     </div>
                     <h2>PetWorld</h2>
                 </Link>
                 <nav className="nav-links">
                     {!user ? (
                         <>
-                        <Link to="/login">Login</Link>
+                            <Link to="/login">Login</Link>
                             <Link to="/register">Register</Link>
                         </>
                     ) : (
                         <>
                             <Link to="/profile">Profile</Link>
-                            <button onClick={handleSignOut} className="signout-button">
-                                Sign Out
-                            </button>
+                            <button onClick={handleSignOut}>Sign Out</button>
                         </>
                     )}
                 </nav>
