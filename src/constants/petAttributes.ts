@@ -11,3 +11,5 @@ export const PET_AGES: { value: number; label: string }[] = [
     { value: 7, label: '7+ years' },
 ];
 
+export const AGE_CATEGORIES = ['Baby','Young', 'Adult', 'Senior'];
+
