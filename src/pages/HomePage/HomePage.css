@@ -12,22 +12,26 @@
     border-radius: 10px;
     margin-bottom: 40px;
     position: relative;
+    flex-wrap: wrap;
 }
 
 .hero-content {
     flex: 1;
-    padding: 20px;
+    padding: 0 20px;
+    max-width: 60%;
 }
 
 .hero-content h1 {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: bold;
     margin-bottom: 20px;
+    margin-top: 0;
     color: var(--text-primary);
 }
 
 .search-fields {
     display: flex;
+    flex-direction: column;
     gap: 10px;
     margin-top: 20px;
 }
@@ -37,7 +41,8 @@
     padding: 12px;
     font-size: 18px;
     border: 1px solid var(--border-color);
-    border-radius: 5px;
+    border-radius: 10px;
+    width: 100%;
 }
 
 .search-fields button {
@@ -45,11 +50,14 @@
     color: var(--text-light);
     cursor: pointer;
     border: none;
+    align-self: flex-start;
+    width: 100%;
 }
 
 .search-fields button:hover {
     background-color: var(--tertiary-color);
 }
+
 
 .hero-image {
     flex: 1;
@@ -57,8 +65,8 @@
 }
 
 .hero-image img {
-    max-width: 400px;
-    border-radius: 20px;
+    width: 100%;
+    border-radius: 10px;
 }
 
 .stats-section {
@@ -89,25 +97,6 @@
     font-size: 18px;
 }
 
-.pet-icons {
-    position: absolute;
-    top: -70px;
-    left: 10%;
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-}
-
-.pet-icons .dog-icon {
-    width: 100px;
-}
-
-.pet-icons .cat-icon {
-    width: 80px;
-    position: relative;
-    top: 20px;
-}
-
 .latest-pets-section {
     padding: 20px;
 }
@@ -124,3 +113,61 @@
     gap: 20px;
 }
 
+@media (max-width: 768px) {
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+        padding: 0;
+    }
+
+    .stat-item h2 {
+        font-size: 24px;
+    }
+
+    .stat-item p {
+        font-size: 16px;
+    }
+
+    .stats-container {
+        gap: 10px;
+    }
+
+    .hero-section {
+        padding: 0;
+        flex-direction: column-reverse;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .hero-image {
+        display: flex;
+        justify-content: center;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+    }
+
+    .search-fields {
+        align-items: center;
+    }
+
+    .stats-section {
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .newest-pets-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 28px;
+    }
+
+    .newest-pets-container {
+        grid-template-columns: 1fr;
+    }
+}

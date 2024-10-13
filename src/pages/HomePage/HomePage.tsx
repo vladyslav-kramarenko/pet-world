@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchPets } from '../../services/apiService';
 import PetCard from '../../components/PetCard/PetCard';
 import { PET_TYPES } from '../../constants/petAttributes';
 import { PROVINCES } from "../../constants/locations";
 import './HomePage.css';
-import heroImage from '../../assets/cat.jpg'; // Import the hero image
-// import heroImage from '../../assets/hero-image.png'; // Import the hero image
-// import dogIcon from '../../assets/dog-icon.png'; // Import dog image
-// import catIcon from '../../assets/cat-ichero-image.png'; // Import the hero image
-import dogIcon from '../../assets/cat.jpg'; // Import dog image
-import catIcon from '../../assets/cat.jpg'; // Import cat image
+import heroImage from '../../assets/hero.png';
 
 const HomePage: React.FC = () => {
     const [petStats, setPetStats] = useState<{ [key: string]: number }>({});
     const [newestPets, setNewestPets] = useState<any[]>([]);
     const [category, setCategory] = useState('');
     const [province, setProvince] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPetData = async () => {
@@ -45,12 +43,13 @@ const HomePage: React.FC = () => {
     };
 
     const handleSearch = () => {
-        console.log(`Searching pets for category: ${category} and province: ${province}`);
+        // Navigate to the PetList page with selected filters as URL parameters
+        navigate(`/pets?category=${category}&province=${province}`);
     };
 
     return (
         <div className="homepage">
-            <header className="hero-section">
+            <div className="hero-section">
                 <div className="hero-content">
                     <h1>Where the Best Friendship Begins</h1>
                     <div className="search-fields">
@@ -70,19 +69,19 @@ const HomePage: React.FC = () => {
                                 </option>
                             ))}
                         </select>
-                        <button className="search-button" onClick={handleSearch}>Search</button>
+                        <button className="search-button" onClick={handleSearch}>
+                            Search
+                        </button>
                     </div>
+
                 </div>
                 <div className="hero-image">
-                    <img src={heroImage} alt="Hero Section" />
+                    <img src={heroImage} alt="Hero Section"/>
                 </div>
-            </header>
+            </div>
 
             <section className="stats-section">
-                <div className="pet-icons">
-                    <img src={dogIcon} alt="Dog Icon" className="dog-icon" />
-                    <img src={catIcon} alt="Cat Icon" className="cat-icon" />
-                </div>
+
                 <div className="stats-container">
                     {PET_TYPES.map((type) => (
                         <div className="stat-item" key={type}>
