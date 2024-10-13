@@ -72,15 +72,18 @@ export const createPet = async (petData: Pet): Promise<void> => {
 /**
  * Update an existing pet by its ID.
  */
-export const updatePet = async (petId: string, petData: Pet): Promise<void> => {
+export const updatePet = async (petId: string, petData: any) => {
     try {
-        const formattedPetData = {
-            ...petData,
-            price: Number(petData.price), // Ensure price is a number
-        };
-        await axios.put(`${API_URL}/${petId}`, formattedPetData);
+        console.log(JSON.stringify(petData));
+
+        const response = await axios.put(`${API_URL}/${petId}`, petData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
     } catch (error) {
-        console.error('Error updating pet:', error);
+        console.error('Error updating pet: ', error);
         throw error;
     }
 };
