@@ -28,7 +28,8 @@ const PetCard: React.FC<PetCardProps> = ({ pet, onClick }) => {
     };
 
     // Map age to categories like baby, adult, etc.
-    const ageCategory = (age: string) => {
+    const ageCategory = (age?: string) => {
+        if (!age) return 'Unknown'; // Handle undefined or null age category
         switch (age.toLowerCase()) {
             case 'young':
                 return 'Baby';
@@ -40,7 +41,6 @@ const PetCard: React.FC<PetCardProps> = ({ pet, onClick }) => {
                 return age; // If no category mapping, return the raw value
         }
     };
-
     // Determine if the price should be displayed or marked as "Free"
     const displayPrice: string = pet.price && pet.price > 0 ? `₴ ${pet.price.toLocaleString()}` : 'Free';
 
@@ -65,7 +65,7 @@ const PetCard: React.FC<PetCardProps> = ({ pet, onClick }) => {
                     <span className="icon-gender"></span> {pet.gender}
                 </p>
                 <p>
-                    <span className="icon-age"></span> {ageCategory(pet.age)}
+                    <span className="icon-age"></span> {ageCategory(pet.age_category)}
                 </p>
             </div>
             <p className="pet-price">{displayPrice}</p>
