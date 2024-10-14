@@ -7,7 +7,6 @@ from botocore.exceptions import ClientError
 # DynamoDB resource setup
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('Pets')
-
 def lambda_handler(event, context):
     print("Received event:", json.dumps(event, indent=2))  # Log the full event
 
