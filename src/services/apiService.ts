@@ -7,20 +7,7 @@ const API_URL = `${API_BASE_URL}/pets`;
 /**
  * Fetch all pets with optional filters and sorting.
  */
-export const fetchPets = async (): Promise<Pet[]> => {
-    try {
-        const response = await axios.get(`${API_URL}`);
-        return response.data.pets;
-    } catch (error) {
-        console.error('Error fetching pets:', error);
-        throw error;
-    }
-};
-
-/**
- * Fetch all pets with optional filters and sorting.
- */
-export const fetchPetsWithFilters = async (filters: {
+export const fetchPets = async (filters?: {
     type?: string;
     age?: string;
     sort?: string;
@@ -31,10 +18,14 @@ export const fetchPetsWithFilters = async (filters: {
     gender?: string;
 }): Promise<Pet[]> => {
     try {
-        const response = await axios.get(API_URL, { params: filters });
+        const validFilters = filters
+            ? Object.fromEntries(Object.entries(filters).filter(([_, value]) => value !== undefined && value !== ''))
+            : {};
+
+        const response = await axios.get(API_URL, { params: validFilters });
         return response.data.pets;
     } catch (error) {
-        console.error('Error fetching pets with filters:', error);
+        console.error('Error fetching pets:', error);
         throw error;
     }
 };

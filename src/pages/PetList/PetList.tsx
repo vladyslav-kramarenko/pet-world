@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import PetCard from '../../components/PetCard/PetCard';
-import { fetchPetsWithFilters } from '../../services/apiService';
+import { fetchPets as fetchPetsWithFilters } from '../../services/apiService';
 import { Pet } from '../../types/Pet';
 import { PET_TYPES } from '../../constants/petAttributes'; // Import the pet categories
 import { PROVINCES } from '../../constants/locations'; // Import the province list
