@@ -4,11 +4,10 @@ import os
 
 # Initialize the S3 client
 s3_client = boto3.client('s3')
-BUCKET_NAME = os.environ['pet-profiles']
+BUCKET_NAME = os.environ['ImgBucket']
 
 def lambda_handler(event, context):
     try:
-        # Parse the request body
         body = json.loads(event['body'])
 
         pet_id = body.get('pet_id')
@@ -31,7 +30,7 @@ def lambda_handler(event, context):
             Params={
                 'Bucket': BUCKET_NAME,
                 'Key': main_image_key,
-                'ContentType': 'image/jpeg'  # Adjust according to the expected image type
+                'ContentType': 'image/jpeg'  # Adjust this based on the expected image type
             },
             ExpiresIn=3600
         )
@@ -42,13 +41,14 @@ def lambda_handler(event, context):
 
         # Gallery images URLs
         for filename in filenames:
+            content_type = 'image/png' if filename.endswith('.png') else 'image/jpeg'
             key = f"pet-profiles/{pet_id}/{filename}"
             upload_url = s3_client.generate_presigned_url(
                 ClientMethod='put_object',
                 Params={
                     'Bucket': BUCKET_NAME,
                     'Key': key,
-                    'ContentType': 'image/jpeg'  # Adjust according to the expected image type
+                    'ContentType': content_type
                 },
                 ExpiresIn=3600
             )
@@ -57,7 +57,6 @@ def lambda_handler(event, context):
                 'file_url': f"https://{BUCKET_NAME}.s3.amazonaws.com/{key}"
             }
 
-        # Return the generated URLs
         return {
             'statusCode': 200,
             'headers': {
