@@ -81,7 +81,7 @@ textarea {
 }
 
 /* Add styling for mandatory fields */
-.form-group label::after {
+.form-group label.required::after {
     content: "*";
     color: red;
     margin-left: 5px;
