@@ -103,3 +103,40 @@ export const fetchPetsByOwner = async (ownerId: string | undefined) => {
         throw error;
     }
 };
+
+/**
+ * Generate signed URLs for image uploads.
+ * @param petId - The ID of the pet.
+ * @param mainImage - The main image filename.
+ * @param additionalImages - An array of additional image filenames.
+ */
+export const getUploadUrls = async (petId: string, mainImage: string, additionalImages: string[]) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/generate-upload-url`, {
+            pet_id: petId,
+            main_image: mainImage,
+            filenames: additionalImages
+        });
+        return response.data;  // Returns { main_image: { upload_url, file_url }, additional_images: [...] }
+    } catch (error) {
+        console.error('Error generating upload URLs:', error);
+        throw error;
+    }
+};
+
+/**
+ * Upload an image to S3 using the signed URL.
+ */
+export const uploadImageToS3 = async (file: File, uploadUrl: string) => {
+    try {
+        await axios.put(uploadUrl, file, {
+            headers: {
+                'Content-Type': file.type
+            }
+        });
+        return true;
+    } catch (error) {
+        console.error('Image upload failed:', error);
+        return false;
+    }
+};
