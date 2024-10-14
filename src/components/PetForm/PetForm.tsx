@@ -1,29 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import './PetForm.css';
 import { Pet } from '../../types/Pet';
-import { AGE_CATEGORIES } from "../../constants/petAttributes";
+import { AGE_CATEGORIES, PET_TYPES } from "../../constants/petAttributes";
 import { PROVINCES } from "../../constants/locations";
 
 interface PetFormProps {
     initialPet?: Pet;
-    onSubmit: (petData: Pet) => void;
-    userId: string; // Assuming the user ID is passed as a prop
+    onSubmit: (petData: Pet, mainImage: File, additionalImages: File[]) => void;
+    userId: string;
 }
 
 const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit, userId }) => {
+    const [mainImage, setMainImage] = useState<File | null>(null);
+    const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+
     const [petData, setPetData] = useState<Pet>({
         pet_name: initialPet?.pet_name || '',
         pet_type: initialPet?.pet_type || '',
-        exact_age: initialPet?.exact_age || '', // Consistent use of exact_age
-        age_category: initialPet?.age_category || 'unknown', // Default to unknown
+        gender: initialPet?.gender || '',
+        exact_age: initialPet?.exact_age || '',
+        age_category: initialPet?.age_category || 'unknown',
         country: 'Canada',
         province: initialPet?.province || '',
         town: initialPet?.town || '',
         price: initialPet?.price || 0,
         description: initialPet?.description || '',
         main_image_url: initialPet?.main_image_url || '',
-        images: initialPet?.images || [], // Initialize as an empty array if undefined
-        owner_id: initialPet?.owner_id || userId, // Automatically set owner_id based on the userId prop
+        images: initialPet?.images || [],
+        owner_id: initialPet?.owner_id || userId,
         contact_name: initialPet?.contact_name || '',
         contact_phone: initialPet?.contact_phone || '',
         hasChip: initialPet?.hasChip || false,
@@ -41,52 +45,32 @@ const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit, userId }) => {
         let category = 'unknown';
         if (!isNaN(exactAge)) {
             if (exactAge < 1) {
-                category = 'baby';
+                category = 'Baby';
             } else if (exactAge >= 1 && exactAge <= 2) {
-                category = 'young';
+                category = 'Young';
             } else if (exactAge > 2 && exactAge <= 7) {
-                category = 'adult';
+                category = 'Adult';
             } else {
-                category = 'senior';
+                category = 'Senior';
             }
         }
         setPetData((prev) => ({ ...prev, age_category: category }));
     }, [petData.exact_age]);
-
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setPetData({ ...petData, [name]: value });
     };
 
-    // Handle checkbox changes
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setPetData({ ...petData, [name]: checked });
-    };
-
-    // Handle price change to ensure it is non-negative
-    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        const validPrice = Math.max(Number(value), 0); // Ensure price is positive
-        setPetData({ ...petData, price: validPrice });
-    };
-
-    // Handle main image file selection
     const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file); // Create a URL for the selected file
-            setPetData({ ...petData, main_image_url: imageUrl });
+        if (e.target.files && e.target.files[0]) {
+            setMainImage(e.target.files[0]);
         }
     };
 
-    // Handle additional images selection
     const handleAdditionalImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        if (files) {
-            const imageUrls = Array.from(files).map(file => URL.createObjectURL(file)); // Create URLs for all selected files
-            setPetData({ ...petData, images: imageUrls });
+        if (e.target.files) {
+            setAdditionalImages(Array.from(e.target.files));
         }
     };
 
@@ -96,25 +80,34 @@ const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit, userId }) => {
         setPetData((prev) => ({ ...prev, age_category: value, exact_age: '' }));
     };
 
-    // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(petData);
+        if (mainImage) {
+            onSubmit(petData, mainImage, additionalImages);  // Pass the petData, main image, and gallery images
+        } else {
+            alert("Main image is required.");
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="pet-form">
             <div className="form-section">
                 <div className="form-group">
-                    <label>Pet Name*:</label>
-                    <input name="pet_name" value={petData.pet_name} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                    <label>Type*:</label>
-                    <input name="pet_type" value={petData.pet_type} onChange={handleChange} required />
+                    <label className="required">Pet Name:</label>
+                    <input name="pet_name" value={petData.pet_name} onChange={handleChange} required/>
                 </div>
 
-                {/* Exact Age and Age Category */}
+                <div className="form-group">
+                    <label className="required">Type:</label>
+                    <select name="pet_type" value={petData.pet_type} onChange={handleChange} required>
+                        {PET_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 <div className="form-group">
                     <label>Exact Age (in years):</label>
                     <input
@@ -128,8 +121,9 @@ const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit, userId }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>Age Category*:</label>
-                    <select name="age_category" value={petData.age_category} onChange={handleAgeCategoryChange} required>
+                    <label className="required">Age Category:</label>
+                    <select name="age_category" value={petData.age_category} onChange={handleAgeCategoryChange}
+                            required>
                         {AGE_CATEGORIES.map((category) => (
                             <option key={category} value={category}>
                                 {category}
@@ -139,12 +133,21 @@ const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit, userId }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>Country*:</label>
-                    <input name="country" value={petData.country} readOnly />
+                    <label className="required">Gender:</label>
+                    <select name="gender" value={petData.gender} onChange={handleChange} required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
                 </div>
 
                 <div className="form-group">
-                    <label>Province*:</label>
+                    <label className="required">Country:</label>
+                    <input name="country" value={petData.country} readOnly/>
+                </div>
+
+                <div className="form-group">
+                    <label className="required">Province:</label>
                     <select name="province" value={petData.province} onChange={handleChange} required>
                         <option value="">Select Province</option>
                         {PROVINCES['Canada'].map((province) => (
@@ -157,57 +160,51 @@ const PetForm: React.FC<PetFormProps> = ({ initialPet, onSubmit, userId }) => {
 
                 <div className="form-group">
                     <label>Town:</label>
-                    <input name="town" value={petData.town} onChange={handleChange} />
+                    <input name="town" value={petData.town} onChange={handleChange}/>
                 </div>
 
                 <div className="form-group">
-                    <label>Price*:</label>
+                    <label className="required">Price:</label>
                     <input
                         type="number"
                         name="price"
                         value={petData.price}
-                        onChange={handlePriceChange}
+                        onChange={handleChange}
                         min="0"
                         required
                     />
                 </div>
 
-                {/* Main Image Picker */}
                 <div className="form-group">
                     <label>Main Image*:</label>
-                    <input type="file" accept="image/*" onChange={handleMainImageChange} required />
-                    {petData.main_image_url && (
-                        <img src={petData.main_image_url} alt="Main Image" width="100" />
-                    )}
+                    <input type="file" accept="image/*" onChange={handleMainImageChange} required/>
+                    {mainImage && <img src={URL.createObjectURL(mainImage)} alt="Main Image" width="100"/>}
                 </div>
 
-                {/* Additional Images Picker */}
                 <div className="form-group">
                     <label>Additional Images:</label>
-                    <input type="file" accept="image/*" multiple onChange={handleAdditionalImagesChange} />
-                    {petData.images?.length > 0 && ( // Use optional chaining here
-                        <div className="image-preview">
-                            {petData.images.map((img, index) => (
-                                <img key={index} src={img} alt={`Additional Image ${index + 1}`} width="100" />
-                            ))}
-                        </div>
-                    )}
+                    <input type="file" accept="image/*" multiple onChange={handleAdditionalImagesChange}/>
+                    <div className="image-preview">
+                        {additionalImages.map((img, index) => (
+                            <img key={index} src={URL.createObjectURL(img)} alt={`Additional Image ${index + 1}`}
+                                 width="100"/>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="form-group full-width">
                     <label>Description:</label>
-                    <textarea name="description" value={petData.description} onChange={handleChange} />
+                    <textarea name="description" value={petData.description} onChange={handleChange}/>
                 </div>
             </div>
 
-            {/* Contact Information */}
             <div className="form-section">
                 <div className="form-group">
-                    <label>Contact Name*:</label>
-                    <input name="contact_name" value={petData.contact_name} onChange={handleChange} required />
+                    <label className="required">Contact Name:</label>
+                    <input name="contact_name" value={petData.contact_name} onChange={handleChange} required/>
                 </div>
                 <div className="form-group">
-                    <label>Contact Phone*:</label>
+                    <label className="required">Contact Phone:</label>
                     <input name="contact_phone" value={petData.contact_phone} onChange={handleChange} required />
                 </div>
             </div>
