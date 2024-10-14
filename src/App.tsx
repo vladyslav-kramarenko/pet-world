@@ -2,9 +2,8 @@ import React from 'react';
 import './App.css';
 import awsconfig from './aws-exports';
 import PetList from "./pages/PetList/PetList";
-import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom'; //
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
 import PetProfilePage from "./pages/PetProfile/PetProfilePage";
-import CreatePet from "./pages/CreatePetPage";
 import EditPet from "./pages/EditPetPage/EditPetPage";
 import {Amplify} from "aws-amplify";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -13,6 +12,7 @@ import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./pages/HomePage/HomePage";
+import CreatePetPage from "./pages/CreatePetPage/CreatePetPage";
 
 
 Amplify.configure(awsconfig);
@@ -31,7 +31,7 @@ function App() {
                     <Route path="/pets/:id" element={<PetProfilePage />} />
 
                     {/* Route for creating a new pet */}
-                    <Route path="/create" element={<CreatePet />} />
+                    <Route path="/create" element={<CreatePetPage />} />
 
                     {/* Route for editing an existing pet */}
                     <Route path="/pets/:id/edit" element={<EditPet />} />
