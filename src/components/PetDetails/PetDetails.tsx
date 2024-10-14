@@ -21,9 +21,9 @@ const PetDetails: React.FC<PetDetailsProps> = ({ pet }) => {
                 <h3>Characteristics</h3>
                 <p><span>Type: </span>{pet.pet_type}</p>
                 <p><span>Gender: </span>{pet.gender}</p>
-                <p><span>Age: </span>{pet.exact_age}</p>
-                <p><span>Location: </span>{pet.town}, {pet.province}, {pet.country}</p>
-                <p><span>Owner: </span>Private Owner</p>
+                <p><span>Age: </span>{pet.exact_age || pet.age_category}</p>
+                <p><span>Location: </span>{pet.town ? `${pet.town}, ` : ''}{pet.province}, {pet.country}</p>
+                {/*<p><span>Owner: </span>Private Owner</p>*/}
             </div>
 
             {/* Health Status */}
