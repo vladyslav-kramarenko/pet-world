@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
 import './Header.css';
@@ -40,9 +40,10 @@ const Header: React.FC = () => {
                     <div className={"logo-wrapper"}>
                         <img src={logo} alt="PetWorld Logo" />
                     </div>
-                    <h2>PetWorld</h2>
+                    <h2 className="desktop-logo-text">PetWorld</h2>
                 </Link>
                 <nav className="nav-links">
+                    <Link to="/create">Post an Ad</Link> {/* This button is now available for everyone */}
                     {!user ? (
                         <>
                             <Link to="/login">Login</Link>
