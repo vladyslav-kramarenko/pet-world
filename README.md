@@ -1,5 +1,6 @@
 # PetWorld: Find Your Next Furry Friend
 Welcome to PetWorld, a project developed during the EPAM IT Marathon. This web application allows users to search for pets available for adoption, connecting people with pets to find their best friends. Built with modern technologies, this project focuses on user experience, flexibility, and scalability.
+[EPAM Campus Diploma](https://certificates.epam.com/certificates/34718b52-1fef-4ff1-add3-3d483a7f1e17)
 
 ## About the Project
 PetWorld is a web-based platform that allows users to find pets in need of a new family. Whether you're searching for a dog, cat, or another type of pet, this application enables users to browse pets by type and location. With the latest listings, detailed pet profiles, and advanced filters, PetWorld simplifies the process of finding your next furry friend.
